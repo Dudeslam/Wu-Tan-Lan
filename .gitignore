@@ -1,0 +1,6 @@
+*.target
+*.sky
+*.map
+*.d
+*.o
+*.a
