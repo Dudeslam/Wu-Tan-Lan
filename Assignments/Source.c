@@ -16,19 +16,20 @@ int IndexCnt=0;
 // static int dec;
 // static float frac;
 static int SendBuf[buffSize];
+static bool SendReady = false;
 
-static void printer(int buf[])
-{
-         size_t n = sizeof(buf);
-        printf("Whole Sendbuf with length %d is currently: ", n);
-        int x;
-        for(x=0; x<n;x++)
-        {
-                printf("%d ", buf[x]);
-        }
-        printf("\n");
+// static void printer(int buf[])
+// {
+//         int n = sizeof(buf)/sizeof(buf[0]);
+//         printf("Whole Sendbuf with length %d is currently: ", n);
+//         int x;
+//         for(x=0; x<n;x++)
+//         {
+//                 printf("%d ", buf[x]);
+//         }
+//         printf("\n");
 
-}
+// }
 
 static float get_light()
 {
@@ -46,8 +47,8 @@ static float get_light()
 
 PROCESS_THREAD(broadcast_button_process, ev, data)
 {
-        static struct etimer timer, starTime;
-
+        static struct etimer timer, starTime, endTime;
+        int u =0;
         PROCESS_BEGIN();
 
                 SENSORS_ACTIVATE(button_sensor);
@@ -71,8 +72,8 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                                 // PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event && data == &button_sensor);
 
                                 SendBuf[IndexCnt] = button_sensor.value(SENSORS_ACTIVE);
-                                printf("%d\n", button_sensor.value(SENSORS_ACTIVE));
-
+                                printf("Btn is: %d to index: %d\n", button_sensor.value(SENSORS_ACTIVE), IndexCnt);
+                                
 
                                 //waiting for 3 seconds
                                 etimer_set(&timer, CLOCK_SECOND * 3);
@@ -82,21 +83,30 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                                 {
                                         IndexCnt=0;
                                 }
-
+                                SendReady = true;
+                                
 
                         }
                         if(IndexCnt<7)
-                        {
-                                int u;
-                                for(u=IndexCnt; u=7; u++)
+                        {       
+
+                                for(u=IndexCnt; u<8; u++)
                                 {
                                         SendBuf[u] = 0;
                                 }
                         }
                         leds_off(LEDS_YELLOW);     //switching off the red LED after 5 seconds
                         IndexCnt=0;
-                        printer(SendBuf);
-                        //print function for sendbuf
+                        etimer_set(&endTime, CLOCK_SECOND);
+                        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&endTime));
+                        if(SendReady==true)
+                        {
+                                printf("Whole Sendbuf is currently: %d %d %d %d %d %d %d %d\n", SendBuf[0], SendBuf[1], SendBuf[2], SendBuf[3], SendBuf[4], SendBuf[5], SendBuf[6], SendBuf[7]);
+                                //send method
+                                SendReady=false;
+                        }
+
+                        
                 }
 
         PROCESS_END();
