@@ -1,5 +1,5 @@
 CONTIKI_PROJECT = Source
 all: $(CONTIKI_PROJECT)
 
-CONTIKI = ../../../..
+CONTIKI = ../../..
 include $(CONTIKI)/Makefile.include
