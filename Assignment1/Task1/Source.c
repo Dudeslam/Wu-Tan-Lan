@@ -6,6 +6,8 @@
 #include "dev/leds.h"
 #include "sys/node-id.h"
 #include <stdio.h>
+#include "Task2/dtw.h"
+
 #define buffSize 8
 
 PROCESS(broadcast_button_process, "Broadcast Button");
@@ -16,6 +18,7 @@ int IndexCnt=0;
 // static int dec;
 // static float frac;
 static int SendBuf[buffSize];
+static int PassBuf[buffSize] = {1, 0, 1, 1, 0, 0, 0, 1};
 static bool SendReady = false;
 
 
@@ -49,6 +52,7 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                         // dec = s;
                         // frac = s-dec;
                         // printf("Light TOTAL =%d.%02uf lux \n", dec, (unsigned int)(frac*100));
+
                         while(get_light()<70)
                         {
                                 if(IndexCnt==0)
@@ -64,7 +68,7 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                                 
 
                                 //waiting for 3 seconds
-                                etimer_set(&timer, CLOCK_SECOND * 3);
+                                etimer_set(&timer, CLOCK_SECOND / 4);
                                 PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
                                 IndexCnt++;
                                 if(IndexCnt>=8)
@@ -91,6 +95,8 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                         {
                                 printf("Whole Sendbuf is currently: %d %d %d %d %d %d %d %d\n", SendBuf[0], SendBuf[1], SendBuf[2], SendBuf[3], SendBuf[4], SendBuf[5], SendBuf[6], SendBuf[7]);
                                 //send method
+                                double dtw_ = dtw(PassBuf, SendBuf, buffSize, buffSize, buffSize);
+                                printf("dtw_ variable is: %lf", dtw_)
                                 SendReady=false;
                         }
 
