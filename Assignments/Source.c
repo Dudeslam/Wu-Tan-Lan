@@ -1,13 +1,11 @@
 #include "contiki.h"
+// #include "core/net/rime/rime.h"
 #include "random.h"
 #include "dev/light-sensor.h"
 #include "dev/button-sensor.h"
 #include "dev/leds.h"
 #include "sys/node-id.h"
 #include <stdio.h>
-#include "dtw.h"
-#include "string.h"
-
 #define buffSize 8
 
 PROCESS(broadcast_button_process, "Broadcast Button");
@@ -17,10 +15,9 @@ int IndexCnt=0;
 // static float s = 0;
 // static int dec;
 // static float frac;
-static double SendBuf[buffSize];
-static double PassBuf[buffSize] = {1, 0, 1, 1, 0, 0, 0, 1};
+static int SendBuf[buffSize];
 static bool SendReady = false;
-static int CastBuf[buffSize];
+
 
 static float get_light()
 {
@@ -36,11 +33,10 @@ static float get_light()
   return 0;
 }
 
-
 PROCESS_THREAD(broadcast_button_process, ev, data)
 {
-        static struct etimer timer, starTime, endTime, ledTime;
-        int u, button =0;
+        static struct etimer timer, starTime, endTime;
+        int u =0;
         PROCESS_BEGIN();
 
                 SENSORS_ACTIVATE(button_sensor);
@@ -53,10 +49,8 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                         // dec = s;
                         // frac = s-dec;
                         // printf("Light TOTAL =%d.%02uf lux \n", dec, (unsigned int)(frac*100));
-
                         while(get_light()<70)
                         {
-                                // leds_off(LEDS_ALL);
                                 if(IndexCnt==0)
                                 {
                                         etimer_set(&starTime, CLOCK_SECOND);
@@ -64,21 +58,13 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                                 }
                                 leds_on(LEDS_YELLOW);      //switching on the YELLOW LED after type sequence started
                                 
-                                if(button_sensor.value(SENSORS_ACTIVE)==1)
-                                { 
-                                        button = 0;
-                                }
-                                else
-                                {
-                                        button = 1;
-                                }
 
-                                SendBuf[IndexCnt] = button;
-                                printf("Btn is: %d to index: %d\n", button, IndexCnt);
+                                SendBuf[IndexCnt] = button_sensor.value(SENSORS_ACTIVE);
+                                printf("Btn is: %d to index: %d\n", button_sensor.value(SENSORS_ACTIVE), IndexCnt);
                                 
 
                                 //waiting for 3 seconds
-                                etimer_set(&timer, CLOCK_SECOND / 4);
+                                etimer_set(&timer, CLOCK_SECOND * 3);
                                 PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
                                 IndexCnt++;
                                 if(IndexCnt>=8)
@@ -103,35 +89,13 @@ PROCESS_THREAD(broadcast_button_process, ev, data)
                         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&endTime));
                         if(SendReady==true)
                         {
-                                
-                                memcpy(&CastBuf, &SendBuf, buffSize);
-                                printf("Whole Sendbuf is currently: %d %d %d %d %d %d %d %d\n", CastBuf[0], CastBuf[1], CastBuf[2], CastBuf[3], CastBuf[4], CastBuf[5], CastBuf[6], CastBuf[7]);
+                                printf("Whole Sendbuf is currently: %d %d %d %d %d %d %d %d\n", SendBuf[0], SendBuf[1], SendBuf[2], SendBuf[3], SendBuf[4], SendBuf[5], SendBuf[6], SendBuf[7]);
                                 //send method
-                                double dtw_ = dtw(PassBuf, SendBuf, buffSize, buffSize, buffSize);
-                                int A;
-                                float frac;
-                                A=dtw_;
-                                frac=(dtw_ -A )*100;
-                                printf("dtw_ variable is: %d.%02u\n", A,(unsigned int)frac);
-                                if(dtw_ <= 2)
-                                {
-                                        leds_on(LEDS_GREEN);
-                                }
-                                else
-                                {
-                                        leds_on(LEDS_RED);
-                                }
                                 SendReady=false;
-
                         }
-                        //turn off all LEDS after 2 sec
-                        etimer_set(&ledTime, CLOCK_SECOND*3);
-                        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&ledTime));
-                        leds_off(LEDS_GREEN);
-                        leds_off(LEDS_RED);
+
                         
                 }
-        SENSORS_DEACTIVATE(button_sensor);
-        SENSORS_DEACTIVATE(light_sensor);
+
         PROCESS_END();
 }
