@@ -1,7 +1,10 @@
 PROJECT_SOURCEFILES += dct.c
-CONTIKI_PROJECT = Source dct
+CONTIKI_PROJECT = Task2
 all: $(CONTIKI_PROJECT)
 
+TARGET_LIBFILES += -lm
+LDLIBS += -lm
+MAKE_NET = MAKE_NET_NULLNET
 CONTIKI = ../../../..
 include $(CONTIKI)/Makefile.include
 
