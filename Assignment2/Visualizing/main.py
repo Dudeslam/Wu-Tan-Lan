@@ -1,4 +1,5 @@
 import plotly
+import sys
 from plotly.offline import plot
 from sklearn.metrics import mean_squared_error
 import pandas as pd
@@ -18,10 +19,13 @@ def read_original_file(filename: str):
     return pd.Series(raw_file.split(","))
 
 if __name__ == "__main__":
-    N = 512
-    M = 120
-    f = read_file("dct512.txt")
-    original = pd.to_numeric(read_original_file("Originalmessage.txt"))
+    N = 256
+    M = 75
+    if (N not in [256, 512]):
+        sys.exit("256 or 512 as N-parameter please..........")
+
+    f = read_file("dct{}.txt".format(N))
+    original = pd.to_numeric(read_original_file("Originalmessage{}.txt".format(N)))
     test = pd.Series(idct(f.values[0:M], n=N))/N
     data = []
     data.append(
