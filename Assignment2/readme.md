@@ -10,4 +10,4 @@ The project is successfull, and the M-sizes of the Cosine transformation compone
 The 
 
 
-![alt text](https://https://github.com/Dudeslam/Wu-Tan-Lan/edit/master/Assignment2/Illustrations/DCT_code.PNG?raw=true)
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/tree/master/Assignment2/Illustrations/DCT_code.PNG?raw=true)
