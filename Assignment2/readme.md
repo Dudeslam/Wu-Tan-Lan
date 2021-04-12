@@ -32,15 +32,15 @@ The results section is divided into two sections with regards to the 512 and 256
 The 512 byte assignment is implemented with a M-value of 120. The result is visualized below. 
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/512_comp.png?raw=true)
 MSE: 0.000207\
-The time taken for this to happen is found to be: \ 
-This will give an energy consumption of: \
+The time taken for this to happen is found to be:\ 
+This will give an energy consumption of:\
 
 ### 256 byte assignment 
 The 256 byte assignment is implemented with a M-value of 75. The result is visualized below. 
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/256_comp.png?raw=true)
 MSE: 0.000316\
-The time taken for this to happen is found to be: \
-This will give an energy consumption of: \
+The time taken for this to happen is found to be:\
+This will give an energy consumption of:\
 
 ## Conclusion
 The project is succesfull and the DCT is properly implemented on the TelosB mote. The reconstructed signal is pretty good and the MSE is pretty low. This is considered to be a good implementation and the tradeoff in accuracy for a 76% reduction in size for the 512 byte case and 71% reduction for the 256 byte signal.
