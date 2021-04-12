@@ -10,4 +10,5 @@ The project is successfull, and the M-sizes of the Cosine transformation compone
 The 
 
 
-![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/tree/master/Assignment2/Illustrations/DCT_code.PNG?raw=true)
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/DCT_code.PNG?raw=true)
+![alt text](https://github.com/JacobKjaerager/Chirpstack_lora_cloud_project/blob/main/non_code_graphics/Web_view.PNG?raw=true)
