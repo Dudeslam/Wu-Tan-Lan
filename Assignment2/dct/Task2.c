@@ -35,6 +35,7 @@ static float get_light()
 
 void save_nth(float *A, float *B, int sz, int nth)
 {
+
     int i =0;
     int k=0;
     B[i]=A[i];
@@ -51,11 +52,13 @@ void save_nth(float *A, float *B, int sz, int nth)
 PROCESS_THREAD(DCTSig, ev, data)
 {
     printf("Starting DCT process");
-
-    save_nth(ECGSignal, ECGSignal, 256, 2);
+    clock_init();
+    
     static struct etimer starTime;
     int button =0;
-
+    float ClockNow, ClockAfter;
+    float frac;
+    int A;
         PROCESS_BEGIN();
 
             SENSORS_ACTIVATE(button_sensor);
@@ -78,15 +81,27 @@ PROCESS_THREAD(DCTSig, ev, data)
                     {
                         case 0:
                             //N=256
+                            save_nth(ECGSignal, ECGSignal, 256, 2);
                             printf("Running option N=256");
+                            ClockNow=clock_time();
                             DCTII(NumberOf(ECGSignal256), result, ECGSignal256);
+                            ClockAfter = ClockNow - clock_time();
+                            A=ClockAfter;
+                            frac=(A-ClockAfter)*100;
+                            printf("Estimated time used %d.%02u", A,frac);
                             leds_off(LEDS_YELLOW);
                             break;
 
                         case 1:
                             //N=512
                             printf("Running option N=512");
+                            ClockNow=clock_time();
 	                        DCTII(NumberOf(ECGSignal), result, ECGSignal);
+                            ClockAfter = ClockNow - clock_time();
+                            printf("Estimated time used %f", ClockAfter);
+                            A=ClockAfter;
+                            frac=(A-ClockAfter)*100;
+                            printf("Estimated time used %d.%02u", A,frac);
                             leds_off(LEDS_YELLOW);
                             break;
                     }
