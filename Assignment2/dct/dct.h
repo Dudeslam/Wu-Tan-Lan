@@ -2,4 +2,4 @@
 #include <stdlib.h>
 #include <math.h>
 
-void DCTII(int , float *, float *);
+void DCTII(int, int, float *, const float *);

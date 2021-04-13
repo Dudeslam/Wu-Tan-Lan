@@ -87,17 +87,25 @@ PROCESS_THREAD(DCTSig, ev, data)
                             printf("Running option N=256\n");
                             result = (float*)malloc(75);
                             ClockNow=clock_time();
-                            DCTII(NumberOf(ECGSignal256), result, ECGSignal256);
+                            DCTII(NumberOf(ECGSignal256), 75, result, ECGSignal256);
                             ClockAfter = ClockNow - clock_time();
                             A=ClockAfter;
                             frac=(A-ClockAfter)*100;
                             printf("Estimated time used %d.%02u\n", A,(unsigned int)frac);
                             for(i=0; i<75;i++)
                             {
+                                float F = *(result + i);
+                                int A;
+                                float frac;
+                                A=F; // get integral part, i.e. A=3
+                                frac=(F-A)*100; // get fractional part, i.e. frac=55
+                                printf("Index: %d = %d.%02u\n", i, A, (unsigned int)frac);
+                                // printf("%d.%02u",A,(unsigned int)frac);
+                                // printf("Index: %d = %d.%02u\n", i, (unsigned int)*(result + i));
                                 // A=result[i];
                                 // frac=(A-result[i])*100;
                                 // printf("value[%d]: %d.%02u\n",i, A,(unsigned int)frac);
-                                printf("value[%d] = %f\n", i, (double)result[i]);
+                                // printf("value[%d] = %f\n", i, (double)result[i]);
                             }
                             leds_off(LEDS_YELLOW);
                             break;
@@ -107,12 +115,12 @@ PROCESS_THREAD(DCTSig, ev, data)
                             printf("Running option N=512\n");
                             result = (float*)malloc(120);
                             ClockNow=clock_time();
-	                        DCTII(NumberOf(ECGSignal), result, ECGSignal);
+	                        DCTII(NumberOf(ECGSignal), 120, result, ECGSignal);
                             ClockAfter = ClockNow - clock_time();
                             A=ClockAfter;
                             frac=(A-ClockAfter)*100;
                             printf("Estimated time used %d.%02u\n", A,(unsigned int)frac);
-                            for(i=0; i<75;i++)
+                            for(i=0; i<120;i++)
                             {
                                 // A=result[i];
                                 // frac=(A-result[i])*100;
