@@ -10,7 +10,7 @@ To this assignment two different technologies has been used. This is an DCT impl
 
 ### Discrete cosine transformation
 The primary technology used for this task is the DCT. The technology is used in this context for compressing an ECG signal to be more energy effective to transmit from a constrained device as the TelosB mote. 
-An example to how a DCT can be implemented in C can be seen at the Figure below. 
+An example to how a DCT can be implemented in C can be seen at the Figure below. \
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/DCT_code2.PNG?raw=true)\
 In the code snippet a couple of parameters are given. This includes the following: 
 - N is the length of the original signal
