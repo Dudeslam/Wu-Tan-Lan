@@ -35,7 +35,7 @@ MSE: 0.000207\
 The time taken for this to happen is found to be:\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/512_time.png?raw=true) \
 The time is found with 1 Cosine component and the overall time is therefore 120 times the found value (The image says seconds, however the found value is in milliseconds)\
-$ \sum_{\forall i}{x_i^{2}} $ \
+<img src="https://render.githubusercontent.com/render/math?math=120*977=117240">
 This will give an energy consumption of:\
 
 ### 256 byte assignment 
