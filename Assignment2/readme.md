@@ -35,7 +35,7 @@ MSE: 0.000207\
 The time taken for this to happen is found to be:\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/512_time.png?raw=true) \
 The time is found with 1 Cosine component and the overall time is therefore 120 times the found value (The image says seconds, however the found value is in milliseconds)\
-<img src="https://render.githubusercontent.com/render/math?math=120*977=117240">
+<img src="https://render.githubusercontent.com/render/math?math=120*977=117.240"> milliseconds\
 This will give an energy consumption of:\
 
 ### 256 byte assignment 
@@ -44,6 +44,8 @@ The 256 byte assignment is implemented with a M-value of 75. The result is visua
 MSE: 0.000316\
 The time taken for this to happen is found to be:\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/256_time.png?raw=true)
+The time is found with 1 Cosine component and the overall time is therefore 75 times the found value.\
+<img src="https://render.githubusercontent.com/render/math?math=75*488=36.600"> milliseconds\
 This will give an energy consumption of:\
 
 ## Conclusion
