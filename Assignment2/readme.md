@@ -9,7 +9,7 @@ The project is successfull, and the M-sizes of the Cosine transformation compone
 To this assignment two different technologies has been used. This is an DCT implementation in C and data visualization in Python
 
 ### Discrete cosine transformation
-The primare technology used for this task is the DCT. The technology is used in this context for compressing an ECG signal to be more energy effective to transmit from a constrained device as the TelosB mote. 
+The primary technology used for this task is the DCT. The technology is used in this context for compressing an ECG signal to be more energy effective to transmit from a constrained device as the TelosB mote. 
 An example to how a DCT can be implemented in C can be seen at the Figure below. 
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/DCT_code2.PNG?raw=true)\
 In the code snippet a couple of parameters are given. This includes the following: 
@@ -32,7 +32,8 @@ The results section is divided into two sections with regards to the 512 and 256
 The 512 byte assignment is implemented with a M-value of 120. The result is visualized below. 
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/512_comp.png?raw=true)
 MSE: 0.000207\
-The time taken for this to happen is found to be:\ 
+The time taken for this to happen is found to be:\
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/512_time.png?raw=true) 
 This will give an energy consumption of:\
 
 ### 256 byte assignment 
@@ -40,6 +41,7 @@ The 256 byte assignment is implemented with a M-value of 75. The result is visua
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/256_comp.png?raw=true)
 MSE: 0.000316\
 The time taken for this to happen is found to be:\
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/256_time.png?raw=true)
 This will give an energy consumption of:\
 
 ## Conclusion
