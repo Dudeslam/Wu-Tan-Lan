@@ -6,6 +6,7 @@
 #include "dev/button-sensor.h"
 #include "dev/leds.h"
 #include "sys/node-id.h"
+#include "sys/log.h"
 #include <stdio.h>
 #include "string.h"
 #include "dct.h"
@@ -14,12 +15,13 @@
 PROCESS(DCTSig, "DCT signal thingy");
 AUTOSTART_PROCESSES(&DCTSig);
 
+#define LOG_MODULE "Test"
+#define LOG_LEVEL LOG_LEVEL_INFO
 #define NumberOf(a) (sizeof (a) / sizeof *(a))
 
 float ECGSignal[512] = { 0.3500, 0.3500, 0.3500, 0.3500, 0.3500, 0.3500, 0.3500, 0.3500, 0.3500, 0.02000, -0.2100, -0.3300, -0.3700, -0.3350, -0.2850, -0.2300, -0.2150, -0.2000, -0.1900, -0.2000, -0.2000, -0.2100, -0.2300, -0.2500, -0.2550, -0.2450, -0.2400, -0.2150, -0.2350, -0.2300, -0.2300, -0.2050, -0.1800, -0.1650, -0.1950, -0.2100, -0.2150, -0.1950, -0.1700, -0.1550, -0.1750, -0.1950, -0.2100, -0.2000, -0.2000, -0.1950, -0.1850, -0.1850, -0.1800, -0.1750, -0.1750, -0.1650, -0.1400, -0.1200, -0.1150, -0.1300, -0.1550, -0.1900, -0.1900, -0.1850, -0.1800, -0.1600, -0.1400, -0.1300, -0.1100, -0.1200, -0.1300, -0.1300, -0.1250, -0.09500, -0.09500, -0.09000, -0.08000, -0.07500, -0.07000, -0.07500, -0.06500, -0.05500, -0.06000, -0.05500, -0.04000, -0.03000, -0.02000, -0.01500, -0.01500, -0.01000, 0.01500, 0.03500, 0.02500, 0.01500, 0.01500, 0.02500, 0.02500, 0.04000, 0.04000, 0.03000, 0.01500, 0.02000, 0.03500, 0.04500, 0.05000, 0.02500, 0.02000, 0.02000, 0.01000, 0.01000, 0, -0.005000, -0.02500, -0.02000, -0.03000, -0.03000, -0.03500, -0.04500, -0.05500, -0.06000, -0.06500, -0.07500, -0.08000, -0.07500, -0.07500, -0.07500, -0.07000, -0.07500, -0.08000, -0.09000, -0.1000, -0.09500, -0.09500, -0.08500, -0.09500, -0.1000, -0.1000, -0.1150, -0.1150, -0.1300, -0.1400, -0.1500, -0.1600, -0.1450, -0.1550, -0.1600, -0.1700, -0.1850, -0.1750, -0.1700, -0.1650, -0.1700, -0.1700, -0.1650, -0.1800, -0.1800, -0.2000, -0.2000, -0.2150, -0.2050, -0.2100, -0.2050, -0.2100, -0.2200, -0.2250, -0.2250, -0.2400, -0.2250, -0.2100, -0.2050, -0.1950, -0.1900, -0.2000, -0.1900, -0.1900, -0.1850, -0.1700, -0.1700, -0.1750, -0.1650, -0.1650, -0.1850, -0.1850, -0.2050, -0.2050, -0.2100, -0.1950, -0.1950, -0.1900, -0.1950, -0.1950, -0.1950, -0.1850, -0.1750, -0.1750, -0.2000, -0.2250, -0.2500, -0.2400, -0.2400, -0.2400, -0.2500, -0.2600, -0.2700, -0.2800, -0.3050, -0.3350, -0.3500, -0.3400, -0.2850, -0.2050, -0.1350, -0.09500, -0.04500, 0.01000, 0.07500, 0.1400, 0.1750, 0.1350, 0.04500, -0.1550, -0.4250, -0.7100, -0.9150, -1.090, -1.255, -1.395, -1.465, -1.505, -1.490, -1.450, -1.390, -1.340, -1.270, -1.155, -1.025, -0.9500, -0.9300, -0.9300, -0.9100, -0.8850, -0.8650, -0.8400, -0.8000, -0.7550, -0.7150, -0.6600, -0.6300, -0.5800, -0.5400, -0.5100, -0.4650, -0.4350, -0.3950, -0.3650, -0.3150, -0.2650, -0.2000, -0.1550, -0.09000, -0.04000, -0.01500, -0.01000, 0.005000, 0.03000, 0.05500, 0.08000, 0.08500, 0.09000, 0.1100, 0.1100, 0.1300, 0.1500, 0.1550, 0.1500, 0.1800, 0.1850, 0.2050, 0.2200, 0.2350, 0.2350, 0.2550, 0.2700, 0.2900, 0.2900, 0.3000, 0.3000, 0.3050, 0.3250, 0.3150, 0.3100, 0.3150, 0.3150, 0.3450, 0.3600, 0.3700, 0.3750, 0.3750, 0.3650, 0.3750, 0.3850, 0.4100, 0.4050, 0.4000, 0.4000, 0.4050, 0.4000, 0.4100, 0.3950, 0.4000, 0.3850, 0.3900, 0.3950, 0.3850, 0.3800, 0.3550, 0.3550, 0.3550, 0.3500, 0.3250, 0.3000, 0.2800, 0.2500, 0.2500, 0.2500, 0.2500, 0.2350, 0.2100, 0.1750, 0.1650, 0.1600, 0.1450, 0.1400, 0.1450, 0.1300, 0.1000, 0.08000, 0.04000, 0.01500, -0.01000, -0.02500, -0.02500, -0.03000, -0.04000, -0.04500, -0.07000, -0.1050, -0.08000, -0.07500, -0.08500, -0.09000, -0.1100, -0.1300, -0.1200, -0.1150, -0.1250, -0.1500, -0.1700, -0.1600, -0.1600, -0.1500, -0.1550, -0.1600, -0.1700, -0.1850, -0.1800, -0.1800, -0.1900, -0.1800, -0.1700, -0.1600, -0.1400, -0.1400, -0.1450, -0.1700, -0.1800, -0.1750, -0.1600, -0.1550, -0.1550, -0.1650, -0.1500, -0.1550, -0.1500, -0.1450, -0.1450, -0.1650, -0.1950, -0.2050, -0.1900, -0.1800, -0.1650, -0.1700, -0.1600, -0.1700, -0.1650, -0.1700, -0.1700, -0.1700, -0.1700, -0.1850, -0.1900, -0.1800, -0.1800, -0.1800, -0.1750, -0.2000, -0.2100, -0.2000, -0.2000, -0.2100, -0.2150, -0.2100, -0.2000, -0.1750, -0.1600, -0.1450, -0.1450, -0.1350, -0.1400, -0.1350, -0.1300, -0.1200, -0.1150, -0.1100, -0.1050, -0.1000, -0.09500, -0.1100, -0.1400, -0.1750, -0.1800, -0.1800, -0.1800, -0.1650, -0.1750, -0.1750, -0.1750, -0.1650, -0.1650, -0.1650, -0.1750, -0.1650, -0.1600, -0.1550, -0.1500, -0.1550, -0.1600, -0.1600, -0.1550, -0.1450, -0.1500, -0.1500, -0.1850, -0.2000, -0.2000, -0.1950, -0.1900, -0.1900, -0.1950, -0.2000, -0.1950, -0.1850, -0.1750, -0.1750, -0.1550, -0.1700, -0.1700, -0.1650, -0.1500, -0.1600, -0.1650, -0.1750, -0.1700, -0.1700, -0.1850, -0.2150, -0.2250, -0.1900, -0.1250, -0.04000, 0.05000, 0.1250, 0.2150, 0.3200, 0.4150, 0.5000, 0.6050, 0.7250, 0.8450, 0.9400, 1.060, 1.110, 1.100, 1.005, 0.8600, 0.6150, 0.2400, -0.1100, -0.3350, -0.4600, -0.5150, -0.5400, -0.5100, -0.4400, -0.3850, -0.3600, -0.3500, -0.3350, -0.3200, -0.2950, -0.3000, -0.3000, -0.3250, -0.3350, -0.3350 };
-float *ECGSignal256;
-float *result;
-
+float ECGSignal256[256];
+float result[256];
 
 static float get_light()
 {
@@ -37,7 +39,6 @@ static float get_light()
 
 void save_nth(float *A, float *B, int sz, int nth)
 {
-
     int i =0;
     int k=0;
     B[i]=A[i];
@@ -46,7 +47,6 @@ void save_nth(float *A, float *B, int sz, int nth)
         k+=nth;
         B[i]=A[k];
     }
-
 }
 
 
@@ -58,10 +58,11 @@ PROCESS_THREAD(DCTSig, ev, data)
     
     static struct etimer starTime;
     int button =0;
-    float ClockNow, ClockAfter;
+    uint32_t ClockNow, ClockAfter, ClockDiff;
     float frac;
     int A;
     int i =0;
+
         PROCESS_BEGIN();
 
             SENSORS_ACTIVATE(button_sensor);
@@ -73,8 +74,8 @@ PROCESS_THREAD(DCTSig, ev, data)
                 while(get_light()<70)
                 {
                     leds_on(LEDS_YELLOW);
-                    printf("Press for option: N=256\n");
-                    printf("Don't press for option: N=512\n");
+                    printf("Don't press for option: N=256\n");
+                    printf("Press for option: N=512\n");
                     etimer_set(&starTime, CLOCK_SECOND*4);
                     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&starTime));
                     button = button_sensor.value(SENSORS_ACTIVE);
@@ -82,30 +83,23 @@ PROCESS_THREAD(DCTSig, ev, data)
                     {
                         case 0:
                             //N=256
-                            ECGSignal256 = (float*)malloc(256);
-                            save_nth(ECGSignal, ECGSignal, 256, 2);
+                            save_nth(ECGSignal, ECGSignal256, 256, 2);
                             printf("Running option N=256\n");
-                            result = (float*)malloc(75);
-                            ClockNow=clock_time();
-                            DCTII(NumberOf(ECGSignal256), 75, result, ECGSignal256);
-                            ClockAfter = ClockNow - clock_time();
-                            A=ClockAfter;
-                            frac=(A-ClockAfter)*100;
-                            printf("Estimated time used %d.%02u\n", A,(unsigned int)frac);
+                            ClockNow = RTIMER_NOW();
+                            DCTII(NumberOf(ECGSignal256), 1, result, ECGSignal256);
+                            ClockAfter = RTIMER_NOW();
+                            ClockDiff = ((ClockAfter - ClockNow) / 32.768);
+                            A=ClockDiff;
+                            frac=(ClockDiff-A)*100;
+                            LOG_INFO("Estimated time used %d.%02u milliseconds\n", A,(unsigned int)frac);
                             for(i=0; i<75;i++)
                             {
-                                float F = *(result + i);
+                                float F = result[i];
                                 int A;
                                 float frac;
                                 A=F; // get integral part, i.e. A=3
                                 frac=(F-A)*100; // get fractional part, i.e. frac=55
                                 printf("Index: %d = %d.%02u\n", i, A, (unsigned int)frac);
-                                // printf("%d.%02u",A,(unsigned int)frac);
-                                // printf("Index: %d = %d.%02u\n", i, (unsigned int)*(result + i));
-                                // A=result[i];
-                                // frac=(A-result[i])*100;
-                                // printf("value[%d]: %d.%02u\n",i, A,(unsigned int)frac);
-                                // printf("value[%d] = %f\n", i, (double)result[i]);
                             }
                             leds_off(LEDS_YELLOW);
                             break;
@@ -113,26 +107,25 @@ PROCESS_THREAD(DCTSig, ev, data)
                         case 1:
                             //N=512
                             printf("Running option N=512\n");
-                            result = (float*)malloc(120);
-                            ClockNow=clock_time();
-	                        DCTII(NumberOf(ECGSignal), 120, result, ECGSignal);
-                            ClockAfter = ClockNow - clock_time();
-                            A=ClockAfter;
-                            frac=(A-ClockAfter)*100;
-                            printf("Estimated time used %d.%02u\n", A,(unsigned int)frac);
+                            ClockNow=RTIMER_NOW();
+	                        DCTII(NumberOf(ECGSignal), 1, result, ECGSignal);
+                            ClockAfter = RTIMER_NOW();
+                            ClockDiff = ((ClockAfter - ClockNow) / 32.768);
+                            A=ClockDiff;
+                            frac=(ClockDiff-A)*100;
+                            LOG_INFO("Estimated time used %d.%u seconds\n", A,(unsigned int)frac);
                             for(i=0; i<120;i++)
                             {
-                                // A=result[i];
-                                // frac=(A-result[i])*100;
-                                // printf("value[%d]: %d.%02u\n",i, A,(unsigned int)frac);
-                                printf("value[%d] = %f\n", i, (double)result[i]);
+                                float F = result[i];
+                                int A;
+                                float frac;
+                                A=F; // get integral part, i.e. A=3
+                                frac=(F-A)*100; // get fractional part, i.e. frac=55
+                                printf("Index: %d = %d.%02u\n", i, A, (unsigned int)frac);
                             }
                             leds_off(LEDS_YELLOW);
                             break;
                     }
-
-                    free(result);
-                    free(ECGSignal256);
                 }
             }
         SENSORS_DEACTIVATE(button_sensor);
