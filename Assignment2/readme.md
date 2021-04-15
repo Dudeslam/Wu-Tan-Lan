@@ -35,8 +35,9 @@ MSE: 0.000207\
 The time taken for this to happen is found to be:\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/512_time.png?raw=true) \
 The time is found with 1 Cosine component and the overall time is therefore 120 times the found value (The image says seconds, however the found value is in milliseconds)\
-<img src="https://render.githubusercontent.com/render/math?math=120*977=117.240"> milliseconds\
+<img src="https://render.githubusercontent.com/render/math?math=120*977ms=117.240ms"> \
 This will give an energy consumption of:\
+<img src="https://render.githubusercontent.com/render/math?math=117.240ms*1,8mA*3V=633mJ"> \
 
 ### 256 byte assignment 
 The 256 byte assignment is implemented with a M-value of 75. The result is visualized below. 
@@ -45,8 +46,9 @@ MSE: 0.000316\
 The time taken for this to happen is found to be:\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment2/Illustrations/256_time.png?raw=true)
 The time is found with 1 Cosine component and the overall time is therefore 75 times the found value.\
-<img src="https://render.githubusercontent.com/render/math?math=75*488=36.600"> milliseconds\
+<img src="https://render.githubusercontent.com/render/math?math=75*488ms=36.600ms"> \
 This will give an energy consumption of:\
+<img src="https://render.githubusercontent.com/render/math?math=36.600ms*1,8mA*3V=198mJ"> \
 
 ## Conclusion
 The project is succesfull and the DCT is properly implemented on the TelosB mote. The reconstructed signal is pretty good and the MSE is pretty low. This is considered to be a good implementation and the tradeoff in accuracy for a 76% reduction in size for the 512 byte case and 71% reduction for the 256 byte signal.
