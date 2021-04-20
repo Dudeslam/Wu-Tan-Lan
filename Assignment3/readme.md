@@ -12,6 +12,7 @@ To compare the sixteen RSSI signals a Python based data visualization implementa
 
 ## Results 
 Let's see
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment4/newplot (4).png?raw=true)\
 
 ## Conclusion
 Maybe this assignment was a waste of time!
