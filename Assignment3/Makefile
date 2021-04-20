@@ -1,0 +1,10 @@
+PROJECT_SOURCEFILES += cc2420.c
+CONTIKI_PROJECT = Task3
+all: $(CONTIKI_PROJECT)
+
+TARGET_LIBFILES += -lm
+LDLIBS += -lm
+MAKE_NET = MAKE_NET_NULLNET
+CONTIKI = ../../../..
+include $(CONTIKI)/Makefile.include
+
