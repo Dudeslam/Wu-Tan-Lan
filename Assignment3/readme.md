@@ -12,9 +12,9 @@ The second technology is the data visualization, which is done in Python
 To compare the 16 RSSI signals a Python based data visualization implementation has been made. This will display the results in a generated .html-file with the help from the libary Plotly. The html-file can be seen in the root folder.  
 
 ## Experiments
-For the experiments a variable is created, which adds the RSSI readings from a designated channel.
-For this experiment there have been taken 300 samples and then taking the mean of the variable.
-To calculate the RSSI from the CC2420 (The RF chip on the mote) register the following formula is needed according to the datasheet\
+For the experiments a function is made, which adds the RSSI readings from a designated channel.
+For this experiment 300 samples has been recorded for each channel. The mean value of the samples has been calculated for each channel.
+To find the RSSI from the CC2420(The RF chip on the mote) register, the following formula is needed according to the datasheet.\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_datasheet.PNG?raw=true)\
 The function used in the assignment takes this into account and can be seen in the following code snippet:
 ```c
@@ -53,7 +53,7 @@ The results are then visualized in python and compared to the illustration shown
 
 
 ## Results 
-Comparing the two images we notice the theory matches the practice quite good. The best channels must be the bars with the lowest value(largest bar) as this gives the loweste noise energy in the channel. The expected best channels is marked on the figure below. The reason this is belived to be the best is because no overlapping with the very powerfull WiFi-channels which is belived to be a large source of interference, espically channel 15 and 25 are expected to be low on noise as they dont fully overlap with the BLE channels either. As seen when comparing the results with the theory it matches quire good. The values interference are small at the channels: 12, 15, 16, 19, 25, 26. Which is close to the expected set of 15, 20, 25, 26 from the theory. \
+Comparing the two images we notice the theory matches the practice quite good. The best channels must be the bars with the lowest value(largest bar) as this gives the lowest noise energy in the channel. The expected best channels is marked on the figure below. The reason this is belived to be the best is because no overlapping with the very powerfull WiFi-channels which is belived to be a large source of interference, espically channel 15 and 25 are expected to be low on noise as they dont fully overlap with the BLE channels either. As seen when comparing the results with the theory it matches quire good. The values interference are small at the channels: 12, 15, 16, 19, 25, 26. Which is close to the expected set of 15, 20, 25, 26 from the theory. \
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/802_BLE_wifi2.PNG?raw=true)\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_16_channels%20(3).png?raw=true)
 
