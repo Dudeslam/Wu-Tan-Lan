@@ -60,5 +60,5 @@ Comparing the two images we notice the theory matches the practice quite good. T
 
 ## Conclusion
 During this experiment we can conclude that the theory matches the obtained results quite good. 
-The reason they don't match perfectly, is belivied to be caused by different sources of errors as the small sample size and that it is not guranteed that the WiFi/BLE-channels are in use at the time of the experiment. These type of experiments could be way better to conduct at e.g an Airport/international conference where the WiFi are heavly in use.  
+The reason they don't match perfectly, is believed to be caused by different sources of errors as the small sample size and that it is not guaranteed that the WiFi/BLE-channels are in use at the time of the experiment. These type of experiments could be way better to conduct at e.g an Airport/international conference where the WiFi are heavily in use.  
 
