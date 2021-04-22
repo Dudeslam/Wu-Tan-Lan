@@ -13,7 +13,7 @@ For the experiments an array was filled with 300 samples and then taking the mea
 This mean value is then added to another buffer to store the mean RSSI the specific channel.
 To calculate the RSSI from the CC2420 (The RF chip on the mote) register the following formula is needed according to the datasheet\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_datasheet.PNG?raw=true)\
-The function used in the assignment takes this into account and can be seen in the following code snippet\
+The function used in the assignment takes this into account and can be seen in the following code snippet:
 ```c
 int
 cc2420_rssi(void)
@@ -43,7 +43,8 @@ cc2420_rssi(void)
   return rssi;
 }
 ```
-![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_function.png?raw=true)\
+And the part shown below, is the part that takes the formula into account, so we get a correct RSSI value\
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_function_snip.png?raw=true)\
 This is done from channel 11 to channel 26 and the results will then be written down in a .txt file.
 The results are then visualized in python and compared to the illustration shown in the assignment description. 
 
