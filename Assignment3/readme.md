@@ -8,6 +8,12 @@ This is the handin for the third task of the course WSN conducted in the Spring 
 To this assignment two different technologies has been used. The RSSI on the individual channels is found with the help of the Contiki CC2420 C-library on the mote. 
 The second technology is the data visualization, which is done in Python
 
+## Experiments
+For the experiments an array was filled with 300 samples and then taking the mean of the values.
+This mean value is then added to another buffer to store the mean RSSI the specific channel.
+This is done from channel 11 to channel 26 and the results will then be written down in a .txt file.
+The results are then visualized in python and compared to the illustration shown in the assignment description.
+
 ### Data visualization
 To compare the 16 RSSI signals a Python based data visualization implementation has been made. This will display the results in a generated .html-file with the help from the libary Plotly. The html-file can be seen in the root folder.  
 
