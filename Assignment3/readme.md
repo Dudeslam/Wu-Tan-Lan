@@ -53,9 +53,9 @@ The results are then visualized in python and compared to the illustration shown
 
 
 ## Results 
-Comparing the two images we notice the theory matches the practice quite good. The best channels must be the bars with the lowest value(largest bar) as this gives the loweste noise energy in the channel. The expected best channels is marked on the figure below. The reason this is belived to be the best is because no overlapping with the very powerfull WiFi-channels which is belived to be a large source of interference, espically channel 15 and 25 are expected to be low on noise as they dont fully overlap with the BLE channels either. As seen when comparing the results with the theory it matches quire good. The values inference are small at the channels: 12, 15, 16, 19, 25, 26. Which is close to the expected set of 15, 20, 25, 26 from the theory. \
+Comparing the two images we notice the theory matches the practice quite good. The best channels must be the bars with the lowest value(largest bar) as this gives the loweste noise energy in the channel. The expected best channels is marked on the figure below. The reason this is belived to be the best is because no overlapping with the very powerfull WiFi-channels which is belived to be a large source of interference, espically channel 15 and 25 are expected to be low on noise as they dont fully overlap with the BLE channels either. As seen when comparing the results with the theory it matches quire good. The values interference are small at the channels: 12, 15, 16, 19, 25, 26. Which is close to the expected set of 15, 20, 25, 26 from the theory. \
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/802_BLE_wifi2.PNG?raw=true)\
-![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_16_channels%20(3).png?raw=true)\
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_16_channels%20(3).png?raw=true)
 
 
 ## Conclusion
