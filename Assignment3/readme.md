@@ -48,7 +48,7 @@ cc2420_rssi(void)
 ```
 And the part shown below, is the part that takes the formula into account, so we get a correct RSSI value\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_function_snip.png?raw=true)\
-This is done from channel 11 to channel 26 and the results will then be written down in a .txt file.
+This is done from channel 11 to channel 26 and the results will then be written down in a CSV-file.
 The results are then visualized in python and compared to the illustration shown in the assignment description. 
 
 
