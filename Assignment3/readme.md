@@ -11,8 +11,12 @@ The second technology is the data visualization, which is done in Python
 ## Experiments
 For the experiments an array was filled with 300 samples and then taking the mean of the values.
 This mean value is then added to another buffer to store the mean RSSI the specific channel.
+To calculate the RSSI from the CC2420 (The RF chip on the mote) register the following formula is needed according to the datasheet\
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_datasheet.PNG?raw=true)\
+The function used in the assignment takes this into account and can be seen in the following code snippet\
+![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_function.PNG?raw=true)\
 This is done from channel 11 to channel 26 and the results will then be written down in a .txt file.
-The results are then visualized in python and compared to the illustration shown in the assignment description.
+The results are then visualized in python and compared to the illustration shown in the assignment description. 
 
 ### Data visualization
 To compare the 16 RSSI signals a Python based data visualization implementation has been made. This will display the results in a generated .html-file with the help from the libary Plotly. The html-file can be seen in the root folder.  
