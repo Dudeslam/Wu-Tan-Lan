@@ -14,6 +14,35 @@ This mean value is then added to another buffer to store the mean RSSI the speci
 To calculate the RSSI from the CC2420 (The RF chip on the mote) register the following formula is needed according to the datasheet\
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_datasheet.PNG?raw=true)\
 The function used in the assignment takes this into account and can be seen in the following code snippet\
+```c
+int
+cc2420_rssi(void)
+{
+  int rssi;
+  int radio_was_off = 0;
+
+  if(locked) {
+    return 0;
+  }
+
+  GET_LOCK();
+
+  if(!receive_on) {
+    radio_was_off = 1;
+    cc2420_on();
+  }
+  wait_for_status(BV(CC2420_RSSI_VALID));
+
+  rssi = (int)((signed char) getreg(CC2420_RSSI));
+  rssi += RSSI_OFFSET;
+
+  if(radio_was_off) {
+    cc2420_off();
+  }
+  RELEASE_LOCK();
+  return rssi;
+}
+```
 ![alt text](https://github.com/Dudeslam/Wu-Tan-Lan/blob/master/Assignment3/Illustrations/RSSI_function.png?raw=true)\
 This is done from channel 11 to channel 26 and the results will then be written down in a .txt file.
 The results are then visualized in python and compared to the illustration shown in the assignment description. 
