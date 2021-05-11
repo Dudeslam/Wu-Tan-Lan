@@ -54,6 +54,9 @@ PROCESS_THREAD(udp_client_process, ev, data)
 
   PROCESS_BEGIN();
   clock_init();
+
+  PROCESS_BEGIN();
+
   /* Initialize UDP connection */
   simple_udp_register(&udp_conn, UDP_CLIENT_PORT, NULL,
                       UDP_SERVER_PORT, udp_rx_callback);
@@ -73,6 +76,11 @@ PROCESS_THREAD(udp_client_process, ev, data)
       frac=(ClockNow-A)*100;
       // LOG_INFO("Estimated time used %d.%02u milliseconds\n", A,(unsigned int)frac);
       snprintf(str, sizeof(str), "Current Temp %u to time %d.%02u", temp, A, (unsigned int)frac);
+      LOG_INFO("Sending request %u to ", count);
+      LOG_INFO_6ADDR(&dest_ipaddr);
+      LOG_INFO_("\n");
+      snprintf(str, sizeof(str), "hello %d", count);
+
       simple_udp_sendto(&udp_conn, str, strlen(str), &dest_ipaddr);
       count++;
     } else {

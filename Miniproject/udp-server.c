@@ -54,7 +54,9 @@ udp_rx_callback(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
+
   LOG_INFO("Received temp '%.*s' from ", datalen, (char *) data);
+  LOG_INFO("Received request '%.*s' from ", datalen, (char *) data);
   LOG_INFO_6ADDR(sender_addr);
   LOG_INFO_("\n");
 #if WITH_SERVER_REPLY
