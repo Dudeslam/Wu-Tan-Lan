@@ -39,6 +39,7 @@
 #define WITH_SERVER_REPLY  1
 #define UDP_CLIENT_PORT	8765
 #define UDP_SERVER_PORT	5678
+int BtnFlag = 1;
 
 static struct simple_udp_connection udp_conn;
 
@@ -69,7 +70,20 @@ udp_rx_callback(struct simple_udp_connection *c,
 PROCESS_THREAD(udp_server_process, ev, data)
 {
   PROCESS_BEGIN();
-
+  SENSORS_ACTIVATE(button_sensor);
+  if(ev = button_hal_press_event)
+  {
+    if(BtnFlag == 1)
+    {
+      BtnFlag = 0;
+    } 
+    else
+    {
+      BtnFlag = 1;
+    }
+    
+  }
+  
   /* Initialize DAG root */
   NETSTACK_ROUTING.root_start();
 

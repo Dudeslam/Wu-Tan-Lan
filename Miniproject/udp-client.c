@@ -17,6 +17,33 @@
 #define SEND_INTERVAL		  (60 * CLOCK_SECOND)
 
 static struct simple_udp_connection udp_conn;
+static float get_temp()
+{
+  static int val;
+  static float s = 0;
+
+  val = sht11_sensor.value(SHT11_SENSOR_TEMP);
+  if(val != -1)
+  {
+    s= ((0.01*val) - 39.60);
+    return s;
+  }
+  return 0;
+}
+
+static float get_light()
+{
+  static int val;
+  static float s = 0;
+
+  val = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
+  if(val != -1)
+  {
+    s = (float)(val * 0.4071);
+    return s;
+  }
+  return 0;
+}
 
 /*---------------------------------------------------------------------------*/
 PROCESS(udp_client_process, "UDP client");
@@ -47,10 +74,12 @@ PROCESS_THREAD(udp_client_process, ev, data)
   static unsigned count;
   static char str[32];
   uip_ipaddr_t dest_ipaddr;
-  uint8_t temp=0;
+  uint8_t temp, light;
   uint32_t ClockNow;
   float frac;
   int A;
+
+  int UseSens = 0;
 
   PROCESS_BEGIN();
   clock_init();
@@ -67,7 +96,18 @@ PROCESS_THREAD(udp_client_process, ev, data)
 
     if(NETSTACK_ROUTING.node_is_reachable() && NETSTACK_ROUTING.get_root_ipaddr(&dest_ipaddr)) {
       /* Send to DAG root */
-      temp = 20 + (random_rand() % 15);
+      if(UseSens == 0)
+      {
+        temp = 20 + (random_rand() % 15);
+        light = 30 + (random_rand() % 50)
+      }
+      else
+      {
+        temp = get_temp();
+        light = get_light();
+      }
+      
+      
       LOG_INFO("Sending temp %u to ", temp);
       LOG_INFO_6ADDR(&dest_ipaddr);
       LOG_INFO_("\n");
