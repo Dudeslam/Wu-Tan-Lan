@@ -71,25 +71,34 @@ PROCESS_THREAD(udp_server_process, ev, data)
 {
   PROCESS_BEGIN();
   SENSORS_ACTIVATE(button_sensor);
-  if(ev = button_hal_press_event)
-  {
-    if(BtnFlag == 1)
-    {
-      BtnFlag = 0;
-    } 
-    else
-    {
-      BtnFlag = 1;
-    }
-    
-  }
-  
+
+
   /* Initialize DAG root */
   NETSTACK_ROUTING.root_start();
 
   /* Initialize UDP connection */
   simple_udp_register(&udp_conn, UDP_SERVER_PORT, NULL,
                       UDP_CLIENT_PORT, udp_rx_callback);
+
+  while(1)
+  {
+    if(ev = button_hal_press_event)
+    {
+      if(BtnFlag == 1)
+      {
+        BtnFlag = 0;
+        //send button flag
+        
+      } 
+      else
+      {
+        BtnFlag = 1;
+        //send button flag
+
+      }
+    }
+
+  }
 
   PROCESS_END();
 }
