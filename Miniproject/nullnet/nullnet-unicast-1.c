@@ -67,22 +67,28 @@ AUTOSTART_PROCESSES(&nullnet_example_process);
 void input_callback(const void *data, uint16_t len,
   const linkaddr_t *src, const linkaddr_t *dest)
 {
-  if(len == sizeof(unsigned)) {
-    unsigned count;
+  if(len == sizeof(unsigned long long int)) {
+    unsigned long long int count;
     memcpy(&count, data, sizeof(count));
-	unsigned flag;
-	flag = count & 0xC000;
-	flag = flag >> 14;
-	flag = flag + 2;
-	unsigned count_1;
-	count_1 = count & 0x3f00;
-	count_1 = count_1 >> 8;
-    LOG_INFO("Received %u from ", count_1);
-	printf("%d", flag);
+    unsigned flag;
+    flag = count & 0xC000;
+    flag = flag >> 14;
+    flag = flag + 2;
+
+    unsigned count_1, count_2, count_3;
+    // Synes det burde være korrekt i forhold til payload i cooja, men print siger noget andet...
+    count_1 = (count >> 10) & 0x3f;
+    count_2 = (count >> 8) & 0x3f;
+    count_3 = count & 0x3f;
+    
+    // Fejl i hvor data kommer fra, mindre ting. 
+    LOG_INFO("Received %u from ", count_1); // Den her print driller.
+    LOG_INFO_("%u", flag);
     LOG_INFO_("\n");
-	unsigned count_2;
-	count_2 = count & 0x00ff;
-	LOG_INFO("Received %u from ", count_2);
+	  LOG_INFO("Received %u from ", count_2);
+    LOG_INFO_("%u", flag);
+    LOG_INFO_("\n");
+	  LOG_INFO("Received %u from ", count_3);
     LOG_INFO_LLADDR(src);
     LOG_INFO_("\n");
   }

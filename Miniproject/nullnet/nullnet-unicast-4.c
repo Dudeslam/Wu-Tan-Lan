@@ -82,7 +82,7 @@ PROCESS_THREAD(nullnet_example_process, ev, data)
 {
   static struct etimer periodic_timer;
   static unsigned count = 0;
-  // uint8_t temp = 0;
+  unsigned temp = 0;
 
   PROCESS_BEGIN();
 
@@ -101,11 +101,13 @@ PROCESS_THREAD(nullnet_example_process, ev, data)
       PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
       
       count = 20 + (random_rand() % 15);
+      temp = 20 + (random_rand() % 15); // ny
 	  
-      LOG_INFO("Sending %d to ", count);
+      LOG_INFO("Sending %d & %d to ", count, temp);
       LOG_INFO_LLADDR(&dest_addr);
       LOG_INFO_("\n");
-      count = count | 0x80;
+      count = (count << 8) + temp; // sender to målinger
+      count = count | 0x8080; // is 0x8080 correct?
       NETSTACK_NETWORK.output(&dest_addr);
       // count++;
       etimer_reset(&periodic_timer);

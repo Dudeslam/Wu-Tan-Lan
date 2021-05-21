@@ -107,9 +107,9 @@ PROCESS_THREAD(nullnet_example_process, ev, data)
       LOG_INFO("Sending %d to ", count);
       LOG_INFO_LLADDR(&dest_addr);
       LOG_INFO_("\n");
-      count = count | 0x40;
+      count = count | 0x40; // Sender kun en måling
       NETSTACK_NETWORK.output(&dest_addr);
-      // count++;
+      
       etimer_reset(&periodic_timer);
     }
   }

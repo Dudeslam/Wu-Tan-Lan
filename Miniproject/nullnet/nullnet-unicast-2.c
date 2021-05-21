@@ -73,15 +73,36 @@ AUTOSTART_PROCESSES(&nullnet_example_process);
 void input_callback(const void *data, uint16_t len,
   const linkaddr_t *src, const linkaddr_t *dest)
 {
+  // Hvis mere data skal modtages her skal if'en ændres
   if(len == sizeof(unsigned)) {
-    unsigned count;
+    // unsigned count;
+    // memcpy(&count, data, sizeof(count));
+    // printf("Size of count: %d\n", sizeof(count));
+	  // memcpy(&dummy, data, sizeof(count));
+	  // count = count & 0x003f;
+    // LOG_INFO("Received %u from ", count);
+    // LOG_INFO_LLADDR(src);
+    // LOG_INFO_("\n");
+	  // rec = 1;
+    // -------------------      Der er en fejl når vi udskriver data fra node 3, men kun fordi jeg har tilføjet så der tages imod 2 temperature fra nr 4
+    unsigned long long int count;
     memcpy(&count, data, sizeof(count));
-	memcpy(&dummy, data, sizeof(count));
-	count = count & 0x003f;
-    LOG_INFO("Received %u from ", count);
+    memcpy(&dummy, data, sizeof(count));
+    printf("sizeof dummy: %d\n", sizeof(dummy));
+    printf("sizeof count: %d\n", sizeof(count));
+    unsigned flag;
+    flag = count & 0xC000;
+    flag = flag >> 14;
+    flag = flag + 2;
+    unsigned count_1;
+    count_1 = count & 0x3f00;
+    count_1 = count_1 >> 8;
+    unsigned count_2;
+    count_2 = count & 0x003f;
+    LOG_INFO("Received %u & %u from ", count_1, count_2);
     LOG_INFO_LLADDR(src);
     LOG_INFO_("\n");
-	rec = 1;
+    rec = 1;
 	
   }
 }
@@ -89,12 +110,11 @@ void input_callback(const void *data, uint16_t len,
 PROCESS_THREAD(nullnet_example_process, ev, data)
 {
   static struct etimer periodic_timer;
-  static unsigned count = 0;
-  static unsigned temp_count = 0;
+  static unsigned long long int count = 0;
+  static unsigned temp_count1, temp_count2 = 0;
   static unsigned temp = 0;
   static unsigned rec_temp = 0;
   static unsigned flag2 = 0;
-  // uint8_t temp = 0;
 
   PROCESS_BEGIN();
 
@@ -112,29 +132,27 @@ PROCESS_THREAD(nullnet_example_process, ev, data)
     while(1) {
       PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
 	  
-	  temp = 20 + (random_rand() % 15);
-	  rec_temp = 1;
+      temp = 20 + (random_rand() % 15);
+      rec_temp = 1;
       
 	  if(rec == 1 && rec_temp == 1) {
-		memcpy(&count, &dummy, sizeof(count));
-		temp_count = count & 0x003f;
-		flag2 = count & 0x00C0;
-		flag2 = flag2 >> 14;
-		flag2 = flag2 + 2;
+      memcpy(&count, &dummy, sizeof(count));
+      temp_count1 = (count >> 8) & 0x3f;
+      temp_count2 = count & 0x003f;
+      flag2 = count & 0x00C0;
+      flag2 = flag2 >> 14;
+      flag2 = flag2 + 2;
 		
-		LOG_INFO("Sending %d ", temp_count);
-		printf("and %d to ", temp);
-	  	count = count << 8 ;
-		count = count + temp;
-        LOG_INFO_LLADDR(&dest_addr);
-		LOG_INFO_("\n");
-		NETSTACK_NETWORK.output(&dest_addr);
-		rec = 0;
-		rec_temp = 0;
+      LOG_INFO("Sending %u & %u ", temp_count1, temp_count2);
+      printf("and %u to ", temp);
+	  	count = (count << 8)  + temp;
+      LOG_INFO_LLADDR(&dest_addr);
+      LOG_INFO_("\n");
+      printf("sizeof new data: %d\n", sizeof(count));
+      NETSTACK_NETWORK.output(&dest_addr);
+      rec = 0;
+      rec_temp = 0;
 	  }
-	  
-	  
-      //temp = 20 + (random_rand() % 15);
 
       etimer_reset(&periodic_timer);
     }
