@@ -7,3 +7,5 @@ Har tilføjet et lille billede med et look up table - rough sketch bare af de by
 
 Har ikke set på energi målinger med energest, men vi kan i hvert fald vælge mellem childs - godt nok hardcoded som det andet.
 
+I linje 163 i uni 2 koden, er der en potenitial løsning. Så skal der bare appendes modsat tænker jeg, men har ikke testet det endnu desværre.
+
