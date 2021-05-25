@@ -107,9 +107,9 @@ PROCESS_THREAD(nullnet_example_process, ev, data)
       LOG_INFO_LLADDR(&dest_addr);
       LOG_INFO_("\n");
       count = (count << 8) + temp; // sender to målinger
-      count = count | 0x8080; // is 0x8080 correct?
+      count = count | 0x8080;
       NETSTACK_NETWORK.output(&dest_addr);
-      // count++;
+      
       etimer_reset(&periodic_timer);
     }
   }

@@ -82,7 +82,7 @@ void input_callback(const void *data, uint16_t len,
     count_3 = count & 0x3f;
     
     // Fejl i hvor data kommer fra, mindre ting. 
-    LOG_INFO("Received %u from ", count_1); // Den her print driller.
+    LOG_INFO("Received %u from ", count_1); // Den her print er forkert.
     LOG_INFO_("%u", flag);
     LOG_INFO_("\n");
 	  LOG_INFO("Received %u from ", count_2);

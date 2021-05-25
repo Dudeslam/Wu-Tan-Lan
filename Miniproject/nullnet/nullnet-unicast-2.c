@@ -62,8 +62,7 @@ static linkaddr_t coordinator_addr =  {{ 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0
 
 unsigned dummy = 0;
 unsigned rec = 0;
-unsigned rec_3 = 0;
-unsigned rec_4 = 0;
+unsigned rec_from = 0;
 
 /*---------------------------------------------------------------------------*/
 PROCESS(nullnet_example_process, "NullNet unicast example");
@@ -88,12 +87,16 @@ void input_callback(const void *data, uint16_t len,
     unsigned long long int count;
     memcpy(&count, data, sizeof(count));
     memcpy(&dummy, data, sizeof(count));
-    printf("sizeof dummy: %d\n", sizeof(dummy));
-    printf("sizeof count: %d\n", sizeof(count));
+    // printf("sizeof dummy: %d\n", sizeof(dummy));
+    // printf("sizeof count: %d\n", sizeof(count));
+    // printf("\ncallback: received count: 0x%llX\n", count);
+    printf("callback: received dummy: 0x%X\n", dummy);
     unsigned flag;
     flag = count & 0xC000;
+    memcpy(&rec_from, &flag, sizeof(flag));
     flag = flag >> 14;
     flag = flag + 2;
+    printf("flag: %d\n", flag);
     unsigned count_1;
     count_1 = count & 0x3f00;
     count_1 = count_1 >> 8;
@@ -111,10 +114,14 @@ PROCESS_THREAD(nullnet_example_process, ev, data)
 {
   static struct etimer periodic_timer;
   static unsigned long long int count = 0;
-  static unsigned temp_count1, temp_count2 = 0;
+  static unsigned temp_count1 = 0;
+  static unsigned temp_count2 = 0;
   static unsigned temp = 0;
   static unsigned rec_temp = 0;
+  static unsigned recFrom4 = 0;
+  static unsigned flag = 0;
   static unsigned flag2 = 0;
+  static unsigned dataFrom3 = 0;
 
   PROCESS_BEGIN();
 
@@ -134,27 +141,60 @@ PROCESS_THREAD(nullnet_example_process, ev, data)
 	  
       temp = 20 + (random_rand() % 15);
       rec_temp = 1;
-      
-	  if(rec == 1 && rec_temp == 1) {
-      memcpy(&count, &dummy, sizeof(count));
-      temp_count1 = (count >> 8) & 0x3f;
-      temp_count2 = count & 0x003f;
-      flag2 = count & 0x00C0;
-      flag2 = flag2 >> 14;
-      flag2 = flag2 + 2;
-		
-      LOG_INFO("Sending %u & %u ", temp_count1, temp_count2);
-      printf("and %u to ", temp);
-	  	count = (count << 8)  + temp;
-      LOG_INFO_LLADDR(&dest_addr);
-      LOG_INFO_("\n");
-      printf("sizeof new data: %d\n", sizeof(count));
-      NETSTACK_NETWORK.output(&dest_addr);
-      rec = 0;
-      rec_temp = 0;
-	  }
+      flag = rec_from;
+      printf("rec_from = 0x%X\n", flag); // Kan helt sikkert laves bedre
+      if(flag == 0x8000) {
+        // Received data from #4
+        // Send the data, including data from #3 if some
+        recFrom4 = 1; // enables sending
+      } else {
+        // Received data from #3
+        // Store the data in a buffer, wait to receive from #4
+        memcpy(&dataFrom3, &dummy, sizeof(unsigned)); // only one byte needed
+        printf("Storing data 0x%X from 3\n", dataFrom3);
+        recFrom4 = 0;
+      }
 
-      etimer_reset(&periodic_timer);
+      
+      if(rec == 1 && rec_temp == 1 && recFrom4 == 1) {
+        memcpy(&count, &dummy, sizeof(count));
+        dummy = 0;
+        printf("count: 0x%llX\n", count);
+        printf("bit shifted count: 0x%llX\n", (count << 48)); // kan det være en løsning til at nulstille data?
+        temp_count1 = (count >> 8) & 0x3f;
+        temp_count2 = count & 0x003f;
+        flag2 = count & 0x00C0;
+        flag2 = flag2 >> 14;
+        flag2 = flag2 + 2;
+
+        printf("Appending 0x%X from 3 to payload\n", dataFrom3); // X is for printing in hex
+        printf("count before dataFrom3 is appended: 0x%llX\n", count); 
+        count = (count << 8) + dataFrom3; // Appends 0x00 in the first message if node 4 is sending before node 3
+        // Prøv at ændre (count << 8) til (count >> 8), kan måske du sammen med det i linje 163
+        printf("count after dataFrom3 is appended:  0x%llX\n", count);
+
+        LOG_INFO("Sending %u & %u ", temp_count1, temp_count2);
+        printf("and %u to ", temp);
+        LOG_INFO_LLADDR(&dest_addr);
+        LOG_INFO_("\n");
+
+        printf("count before temp is appended: 0x%llX\n", count);
+        count = (count << 8) + temp;
+        printf("count after temp is appended: 0x%llX\n", count);
+        
+        printf("count to send to 1: 0x%llX\n", count);
+        NETSTACK_NETWORK.output(&dest_addr);
+        // Nulstiller variabler, igen ikke bedste løsning
+        rec = 0;
+        rec_temp = 0;
+        recFrom4 = 0;
+        dataFrom3 = 0; // clear data from node 3
+        count = 0; // clear data from node 4
+      } else {
+        printf("Node 4 has not sent yet\n");
+      }
+
+        etimer_reset(&periodic_timer);
     }
   }
 
